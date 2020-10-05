@@ -18,6 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name="id.ac.ui.cs.muhammarr.testapp.stopwatch.StopwatchService" android:enabled="true"></service>
     </application>
 
 </manifest>
