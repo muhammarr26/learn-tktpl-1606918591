@@ -1,16 +1,25 @@
 package id.ac.ui.cs.muhammarr.testapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.view.View;
+// Source: https://developer.android.com/training/basics/fragments/communicating.html
+public class MainActivity extends AppCompatActivity
+        implements ItemFragment.OnItemFragmentClickListener {
 
-public class MainActivity extends AppCompatActivity {
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof ItemFragment) {
+            ItemFragment itemFragment = (ItemFragment) fragment;
+            itemFragment.setOnItemFragmentClickListener(this);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,13 +28,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        //Create instance of your Fragment
+        Fragment fragment = new ItemFragment();
+        //Add Fragment instance to your Activity
+        fragmentTransaction.add(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onItemFragmentClicked(Bundle bundle) {
+        DetailFragment detail = new DetailFragment();
+        detail.setArguments(bundle);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, detail);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
