@@ -16,6 +16,10 @@ public class MainActivity extends AppCompatActivity {
 
     static private int counter = 0;
 
+    static {
+        System.loadLibrary("CountUp");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                incrementCounter();
+                counter = countUp(counter);
                 TextView text = findViewById(R.id.textView);
                 text.setText(String.format("%s (%d)", getString(R.string.hello_world), counter));
             }
@@ -45,11 +49,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // For testing purpose
-    static public void incrementCounter(){
+    public static void incrementCounter(){
         counter++;
     }
 
-    static public int getCounter(){
+    public static int getCounter(){
         return counter;
     }
+
+    private static native int countUp(int counter);
 }
